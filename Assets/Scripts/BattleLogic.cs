@@ -8,18 +8,24 @@ public class BattleLogic : MonoBehaviour
     // Characters are first instantiated and added to the following lists. As characters are defeated, they are removed from these lists.
     // Once one of the lists is empty, the other list wins the battle.
     // *NOTE: during set up you may wish to make these lists public so you can check characters are been added and removed throughout the battle. Remember to make private at the end.
+    
     private List<CharacterStats> activeHeroes = new List<CharacterStats>();
     private List<CharacterStats> activeMonsters = new List<CharacterStats>();
 
     // TODO: Create more prefabs in the Unity editor and add to the following arrays so they can be instantiated into the battle.
+    [Header("Hero")]
     public CharacterStats[] heroLibrary;
-    public CharacterStats[] monsterLibrary;
+    public Transform[] heroSpawnPoints;
 
     // TODO: In the Unity editor, populate the following arrays with spawn points where you want the heroes and monsters to be instantiated.
-    public Transform[] heroSpawnPoints;
+    [Space(10)]
+    [Header("Monster")]
+    public CharacterStats[] monsterLibrary;
     public Transform[] monsterSpawnPoints;
+    
 
     // A reference to the Writetext script which handles writing text to the screen. Usage: ouputLog.OutputText( "text to display here" );
+    [Header("Output Log")]
     public WriteText ouputLog;
 
     private void Start()
@@ -62,10 +68,14 @@ public class BattleLogic : MonoBehaviour
         foreach( Transform sp in spawnPositions )
         {
             // Check to see if position is null (eg it may not have been assigned in the Unity editor) If it is null, go on with other spawn positions.
-            if( sp == null ) { continue; }
+            if( sp == null )
+            {
+                continue;
+            }
 
             // Instantiate a random character from the characterLibrary (*See 'Instantiate' and 'Random.Range' in the Unity Scripting Reference for more)
             // HINT: GameObject newCharacter = ...
+            //Instantiate(herolist[Random.Range(0, herolist.Count)], heroSpawnPoints[i].transform.position, Quaternion.identity);
 
             // Fix the new character GameObject name (eg remove the "(Clone)" Unity puts at the end)  Uncomment the next line...
             //newCharacter.name = newCharacter.name.Replace( "(Clone)", "" );
@@ -113,12 +123,14 @@ public class BattleLogic : MonoBehaviour
         // TODO: Randomly select a hero and monster from the active heroes ( eg choosing one hero and one monster per round )
         CharacterStats hero = this.activeHeroes[ Random.Range( 0, this.activeHeroes.Count ) ];
         // HINT: CharacterStats monster = ...
+        CharacterStats monster = this.activeMonsters[Random.Range(0, this.activeMonsters.Count)];
 
         // Dull the color of all active characters.
         this.SetAllActiveCharacterColors( Color.gray );
 
         // Set the randomly selected, fighting hero and monster characters back to white ( eg Makes it easier to see which characters are fighting )
         hero.GetComponent<SpriteRenderer>().color = Color.white;
+        monster.GetComponent<SpriteRenderer>().color = Color.white;
         //monster.GetComponent<SpriteRenderer>().color = Color.white;
 
         // Some text that will be
@@ -152,12 +164,13 @@ public class BattleLogic : MonoBehaviour
             {
                 // If the heros' health is less than or equal to zero, then destroy the hero and output 'the monster has defeated the hero'.
                 // HINT: Destroy( ... );
-                // log = monster.name + " defeated " + hero.name + ".";
+                Destroy(hero.gameObject);
+                log = monster.name + " defeated " + hero.name + ".";
             }
             else
             {
                 // If the heros' health is greater than zero, then output 'the monster hit the hero for X points of damage'.
-                // log = monster.name + " hit " + hero.name + " for " + monster.damage + " points of damage.";
+                log = monster.name + " hit " + hero.name + " for " + monster.damage + " points of damage.";
             }
         }
         else
@@ -165,9 +178,17 @@ public class BattleLogic : MonoBehaviour
             // Hero hits monster (HINT: See TakeDamage( amount ) method in CharacterStats script)
            
             // Check if monster health is less than or equal to zero.
+            if(monster.health <= 0f)
+            {
                 // If so, destroy the monster gameobject and output '{hero name} defeated {monster name}'
+                Destroy(monster.gameObject);
+                log = hero.name + " defeated " + monster.name + ".";
+            }
+            else
+            {
                 // Else, output '{hero name} hit {monster name} for {hero damage} points of damage.'
-            
+                log = hero.name + " hit " + monster.name + " for " + hero.damage + " points of damage.";
+            }
         }
 
 
