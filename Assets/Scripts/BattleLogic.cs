@@ -76,7 +76,7 @@ public class BattleLogic : MonoBehaviour
 
             // Position the new character at the current loop spawn position.
             // HINT: newCharacter.transform.position = ...
-            newCharacter.transfrom.position = sp.position; 
+            newCharacter.transform.position = sp.position; 
 
             // Add the new character to the passed in active List.
             activeList.Add( newCharacter.GetComponent<CharacterStats>() );
@@ -121,7 +121,7 @@ public class BattleLogic : MonoBehaviour
         CharacterStats monster = this.activeMonsters[Random.Range(0, this.activeMonsters.Count)];
 
         // Dull the color of all active characters.
-        this.SetAllActiveCharacterColors( new color(0.25f,0.25f,0.25f,1) );
+        this.SetAllActiveCharacterColors( new Color(0.25f,0.25f,0.25f,1) );
 
         // Set the randomly selected, fighting hero and monster characters back to white ( eg Makes it easier to see which characters are fighting )
         hero.GetComponent<SpriteRenderer>().color = Color.white;
@@ -153,7 +153,7 @@ public class BattleLogic : MonoBehaviour
         if( Random.value > 0.5f )
         {
             // Monster hits hero (HINT: See TakeDamage( amount ) method in CharacterStats script)
-            hero.Takedamage(monster.damage);
+            hero.TakeDamage(monster.damage);
 
             // Check hero health.
             if( hero.health <= 0f )
@@ -172,7 +172,7 @@ public class BattleLogic : MonoBehaviour
         else
         {
             // Hero hits monster (HINT: See TakeDamage( amount ) method in CharacterStats script)
-            monster.Takedamage(hero.damage);
+            monster.TakeDamage(hero.damage);
             // Check if monster health is less than or equal to zero.
             if(monster.health <= 0f)
             {
