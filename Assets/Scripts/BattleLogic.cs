@@ -11,21 +11,15 @@ public class BattleLogic : MonoBehaviour
     
     private List<CharacterStats> activeHeroes = new List<CharacterStats>();
     private List<CharacterStats> activeMonsters = new List<CharacterStats>();
-
-    // TODO: Create more prefabs in the Unity editor and add to the following arrays so they can be instantiated into the battle.
-    [Header("Hero")]
+   
     public CharacterStats[] heroLibrary;
     public Transform[] heroSpawnPoints;
-
-    // TODO: In the Unity editor, populate the following arrays with spawn points where you want the heroes and monsters to be instantiated.
-    [Space(10)]
-    [Header("Monster")]
+ 
     public CharacterStats[] monsterLibrary;
     public Transform[] monsterSpawnPoints;
     
 
     // A reference to the Writetext script which handles writing text to the screen. Usage: ouputLog.OutputText( "text to display here" );
-    [Header("Output Log")]
     public WriteText ouputLog;
 
     private void Start()
@@ -64,27 +58,28 @@ public class BattleLogic : MonoBehaviour
         // TODO: Complete the code in the following loop to instantiate a prefab from the characterLibrary at each of the spawnPositions. 
         //       Instantiated characters need to be added to the activeList.
 
+
         // Loop through each of the spawn position and instantiate a random character at that position.
         foreach( Transform sp in spawnPositions )
         {
             // Check to see if position is null (eg it may not have been assigned in the Unity editor) If it is null, go on with other spawn positions.
-            if( sp == null )
-            {
-                continue;
-            }
+            if( sp == null )  { continue; }
+
+
 
             // Instantiate a random character from the characterLibrary (*See 'Instantiate' and 'Random.Range' in the Unity Scripting Reference for more)
             // HINT: GameObject newCharacter = ...
-            //Instantiate(herolist[Random.Range(0, herolist.Count)], heroSpawnPoints[i].transform.position, Quaternion.identity);
-
+            GameObject newCharacter = Instantiate(characterLibrary[Random.Range(0, characterLibrary.Length)].gameObject);
+            
             // Fix the new character GameObject name (eg remove the "(Clone)" Unity puts at the end)  Uncomment the next line...
-            //newCharacter.name = newCharacter.name.Replace( "(Clone)", "" );
+            newCharacter.name = newCharacter.name.Replace( "(Clone)", "" );
 
             // Position the new character at the current loop spawn position.
             // HINT: newCharacter.transform.position = ...
+            newCharacter.transfrom.position = sp.position; 
 
             // Add the new character to the passed in active List.
-            //activeList.Add( newCharacter.GetComponent<CharacterStats>() );
+            activeList.Add( newCharacter.GetComponent<CharacterStats>() );
         }
     }
 
@@ -126,12 +121,12 @@ public class BattleLogic : MonoBehaviour
         CharacterStats monster = this.activeMonsters[Random.Range(0, this.activeMonsters.Count)];
 
         // Dull the color of all active characters.
-        this.SetAllActiveCharacterColors( Color.gray );
+        this.SetAllActiveCharacterColors( new color(0.25f,0.25f,0.25f,1) );
 
         // Set the randomly selected, fighting hero and monster characters back to white ( eg Makes it easier to see which characters are fighting )
         hero.GetComponent<SpriteRenderer>().color = Color.white;
         monster.GetComponent<SpriteRenderer>().color = Color.white;
-        //monster.GetComponent<SpriteRenderer>().color = Color.white;
+        
 
         // Some text that will be
         string log = "";
@@ -158,6 +153,7 @@ public class BattleLogic : MonoBehaviour
         if( Random.value > 0.5f )
         {
             // Monster hits hero (HINT: See TakeDamage( amount ) method in CharacterStats script)
+            hero.Takedamage(monster.damage);
 
             // Check hero health.
             if( hero.health <= 0f )
@@ -176,7 +172,7 @@ public class BattleLogic : MonoBehaviour
         else
         {
             // Hero hits monster (HINT: See TakeDamage( amount ) method in CharacterStats script)
-           
+            monster.Takedamage(hero.damage);
             // Check if monster health is less than or equal to zero.
             if(monster.health <= 0f)
             {
