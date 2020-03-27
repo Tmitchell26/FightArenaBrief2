@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1728764422300266428}
   - component: {fileID: 1364738583258310836}
   m_Layer: 0
-  m_Name: Boar
+  m_Name: Thomas Fister
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 25
-  damage: 30
+  damage: 12
 --- !u!82 &1364738583258310836
 AudioSource:
   m_ObjectHideFlags: 0

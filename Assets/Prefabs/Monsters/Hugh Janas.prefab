@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 40
-  damage: 20
+  damage: 12
 --- !u!82 &1599014341669451215
 AudioSource:
   m_ObjectHideFlags: 0

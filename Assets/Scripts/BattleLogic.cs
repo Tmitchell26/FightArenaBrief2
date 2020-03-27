@@ -150,7 +150,8 @@ public class BattleLogic : MonoBehaviour
 
 
         // EXAMPLE: Randomly choose either the the hero or the monster to hit the other.
-        if( Random.value > 0.5f )
+        if( monster.health > hero.health)
+        //if( Random.value > 0.5f )
         {
             // Monster hits hero (HINT: See TakeDamage( amount ) method in CharacterStats script)
             hero.TakeDamage(monster.damage);
@@ -195,8 +196,15 @@ public class BattleLogic : MonoBehaviour
 
     private void SetAllActiveCharacterColors( Color color )
     {
-        foreach( CharacterStats ch in this.activeHeroes ) { ch.GetComponent<SpriteRenderer>().color = color; }
-        foreach( CharacterStats ch in this.activeMonsters ) { ch.GetComponent<SpriteRenderer>().color = color; }
+        foreach( CharacterStats ch in this.activeHeroes )
+        {
+            ch.GetComponent<SpriteRenderer>().color = color;
+        }
+        
+        foreach( CharacterStats ch in this.activeMonsters )
+        {
+            ch.GetComponent<SpriteRenderer>().color = color;
+        }
     }
 
     private void EndBattle( string finalMessage )

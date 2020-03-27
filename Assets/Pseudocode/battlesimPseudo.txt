@@ -1,0 +1,98 @@
+1. Create private lists 
+	- character stats list for active heros calling the character stats class
+	- character stats list for actibe monsters calling the character stats class
+
+2. create hero arrays 
+	- heroLibrary (characterstats array)
+	- herospawnpoints (transform array)
+
+3. create monster arrays 
+	- monster library (characterstats array)
+	- monsterspawnpoints ( transform array)
+
+4. create public variable 
+	- outputlog (WriteText)
+
+5. create start method 
+	- create the active heros list
+		- instantiate random characters onto spawn points using (herolibrary,herospawnpoints,activeheros)
+	- create the active monsters list 
+		- instantiate random characters onto spawn points using (monsterlibrary,monsterspawnpoints,activemonsters)
+	- check if heros and monsters have been created 
+		- IF active heros and active monster counts both = 0 
+			- end the battle - display message "there will be no battle today"
+	- call fight method every four seconds until cancel invoke is activated 
+		- invokerepeating <- "fight" , 4 , 4
+	- display start battle message 
+		- "let the battle begin"
+
+6. create the instantiate random characters onto spawn points method 
+	- create a for each loop 
+		- transform sp in spawnpositions
+			- if sp equals null 
+				- then continue
+			- call the new character gameobject 
+				- instantiate a random character from the character library 
+			- fix the name of the new character 
+			- assign the new character the current spawnpoint loop position 
+			- add the new character to the passed in active loop
+
+7. create fight method 
+	- remove any destoryed character slots form active lists 
+		activeheros - remove all <- item => item equals null
+		activemonsters - remove all <- item => item equals null
+	- check to see if there are no heros or monsters left 
+		- if activehero and activemonster counts equals 0 
+			- display message " all heros and monsters have been defeated"
+	- check to see if there are no heros left 
+		- if active hero count equals 0 
+			- display message " Defeat, the heros have been defeated"
+	- check to see if there are no monsters left 
+		- if active hero count equals 0 
+			- display message "Victory, the monsters have been defeated"
+	- randomly select one hero and monster to battle each round 
+		- characterstats hero = activeheros [random range from 0 to active hero count]
+		- characterstats monster = activemonsters [ random range from 0 to active monster count]
+	- dull the colour of all the active characters 
+		- set all active character colors <- new color <- 0.25,0.25,0.25,1
+	- set the randonly selected characters each round back to white
+		- get hero sprite renderer and change color to white 
+		- get monster sprite renderer and change color to white 
+	- create log variable 
+		- log = "" (String)
+
+	- out of the 2 randomly selected hero and monster
+	- the character with highest health will attack the other 
+		- if monster health is greater then hero health 
+			hero takes damage from monster damage 
+			- if hero health <= 0
+				- destroy hero gameobject 
+				- call log and display message - monster name defeated hero name
+			- else 
+				- call log and display message - monster name hit hero name for (monster damage) points of damage
+		- else 
+			- monster takes damage from hero 
+			- if monster health <= 0
+				- destroy monster game object
+				- call log and display message - hero name defeated monster name
+			- else 
+				call log and display message - hero name hit monster name for (hero damage) points of damage
+
+	- writes outcome of the fight to the screen 
+		- outputLog.outputText <- log
+
+8. create private method for set all active character colors <- color (Color)
+	- for each characterstats ch in active heros 
+		- get sprite renderer component color = color 
+	- for each characterstats ch in active monsters 
+		- get sprite renderer component color = color 
+
+9. create private message endbattle <- final message (String)
+	- reset remaining characters colors back to white 
+		- call set all active character colors <- color = white
+	- stop the attack method from being called 
+		- call cancel invoke method 
+	- send the final string to the output log and tell it to leave it on the screen
+		- outputLog.outputText <- final message
+		- outputLog.leaveOnScreen = true
+
